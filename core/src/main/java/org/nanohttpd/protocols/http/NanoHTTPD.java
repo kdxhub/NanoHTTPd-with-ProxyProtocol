@@ -137,7 +137,7 @@ public abstract class NanoHTTPD {
      * @see {@link https://www.haproxy.org/download/1.8/doc/proxy-protocol.txt}
      */
     public void putProxyProtocolSupport(String value) {
-        switch (Objects.requireNonNullElse(value, "").toLowerCase()) {
+        switch ((value == null) ? "" : value.toLowerCase()) {
             case "v1":
             case "1":
                 proxyProtocol = ProxyProtocol.PROXY_PROTOCOL_SUPPORT.V1;
