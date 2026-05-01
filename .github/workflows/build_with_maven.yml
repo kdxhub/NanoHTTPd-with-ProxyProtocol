@@ -1,0 +1,46 @@
+name: Build Java Project with Maven
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get short git hash
+        id: git
+        run: echo "sha=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      # 1. 生成主 jar / -sources.jar / -javadoc.jar
+      - name: Build with Maven
+        run: |
+          mvn -B clean package
+
+      # 2. 检查构建产物
+      - name: Detect artifact name
+        id: artifacts
+        run: echo "name=$(cat target/artifacts.txt)" >> "$GITHUB_OUTPUT"
+
+      # 5. 上传 CI 产物
+      - name: Upload built jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: NanoHTTPd-with-ProxyProtocol-git@${{ steps.git.outputs.sha }}
+          path: target/*.jar

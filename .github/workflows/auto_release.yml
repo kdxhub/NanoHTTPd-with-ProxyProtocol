@@ -1,0 +1,90 @@
+name: Auto Release
+
+on:
+  push:
+    tags: ["*"]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get short git hash
+        id: git
+        run: echo "sha=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+
+      # 检测 tag 是否包含字母（a-zA-Z），并导出 is_release / prerelease
+      - name: Detect if tag contains letters
+        id: tagcheck
+        shell: bash
+        run: |
+          TAG="${{ github.ref_name }}"
+          if [[ "$TAG" =~ [A-Za-z] ]]; then
+            echo "has_letters=true" >> "$GITHUB_OUTPUT"
+            echo "is_release=false" >> "$GITHUB_OUTPUT"
+            echo "prerelease=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_letters=false" >> "$GITHUB_OUTPUT"
+            echo "is_release=true" >> "$GITHUB_OUTPUT"
+            echo "prerelease=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      # 生成主 jar / -sources.jar / -javadoc.jar
+      - name: Build with Maven
+        run: |
+          mvn -B clean package
+
+      # 检查构建产物
+      - name: Detect artifact name
+        id: artifacts
+        run: echo "name=$(cat target/artifacts.txt)" >> "$GITHUB_OUTPUT"
+
+      # 上传 CI 产物
+      - name: Upload built jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: NanoHTTPd-with-ProxyProtocol-git@${{ steps.git.outputs.sha }}.jar
+          path: target/*.jar
+
+      # 读取 ChangeLog 内容
+      - name: Read ChangeLog
+        id: changelog
+        shell: bash
+        run: |
+          if [ -f ./.change_log.md ]; then
+            {
+              echo 'body<<EOF'
+              cat docs/.change_log.md
+              echo
+              echo 'EOF'
+            } >> "$GITHUB_OUTPUT"
+          else
+            echo "body=*No ChangeLog yet.*" >> "$GITHUB_OUTPUT"
+          fi
+
+      # 发布 Release (修改 files 参数)
+      - name: Create Release & Upload Assets
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: v${{ github.ref_name }}
+          body: ${{ steps.changelog.outputs.body }}
+          files: |
+            target/*.jar
+          draft: false
+          prerelease: ${{ steps.tagcheck.outputs.prerelease }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
