@@ -52,7 +52,9 @@ import org.nanohttpd.protocols.http.request.Method;
 /**
  * @author victor & ritchieGitHub
  * @deprecated NanoHTTPd 的文件上传使用的库存在<b>远程执行漏洞</b>，请勿使用！！
- * @see {@link https://github.com/kdxhub/NanoHTTPd-with-ProxyProtocol/pull/1#issuecomment-4357805479}  该漏洞的详情信息
+ * @see {@link https
+ *      ://github.com/kdxhub/NanoHTTPd-with-ProxyProtocol/pull/1#issuecomment
+ *      -4357805479} 该漏洞的详情信息
  */
 @Deprecated
 public class NanoFileUpload extends FileUpload {
