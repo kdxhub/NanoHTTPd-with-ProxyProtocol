@@ -348,9 +348,18 @@ public class HTTPSession implements IHTTPSession {
         Response r = null;
         try {
             // 首先需要解析 Proxy Protocol ，这段数据在任何应用数据之前。
-            proxyProtocol = new ProxyProtocol(inputStream, protocolVersion);
-            if (pp.available) {
-                this.remoteIp = pp.realIp;
+            // 只有当服务端启用了 proxy protocol 支持（非 NONE）时才尝试解析，避免抛出异常中断会话。
+            String ppSupport = this.httpd.getProxyProtocolSupport();
+            if (ppSupport != null && !ppSupport.equals(ProxyProtocol.PROXY_PROTOCOL_SUPPORT.NONE)) {
+                try {
+                    this.proxyProtocol = new ProxyProtocol(inputStream, ppSupport);
+                    if (this.proxyProtocol != null && this.proxyProtocol.available) {
+                        this.remoteIp = this.proxyProtocol.realIp;
+                    }
+                } catch (IllegalArgumentException | IOException e) {
+                    // 解析失败时忽略，保持原有 remoteIp
+                    NanoHTTPD.LOG.log(Level.FINE, "ProxyProtocol parsing failed: " + e.getMessage());
+                }
             }
 
             // Read the first 8192 bytes.
