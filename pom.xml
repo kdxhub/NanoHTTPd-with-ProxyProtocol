@@ -7,21 +7,37 @@
 	</parent>
 	<groupId>org.nanohttpd</groupId>
 	<artifactId>nanohttpd-project</artifactId>
-	<version>2.4.0</version>
+	<version>2.3.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>NanoHttpd-Project</name>
-	<description>NanoHttpd is a light-weight HTTP server designed for embedding in other applications, which support Proxy Protocol now.</description>
-	<url>https://github.com/kdxhub/kdxhub-NanoHTTPd-with-ProxyProtocol</url>
+	<description>NanoHttpd is a light-weight HTTP server designed for embedding in other applications.</description>
+	<url>http://www.nanohttpd.org</url>
 	<scm>
-		<!-- <connection>scm:git:https://github.com/NanoHttpd/nanohttpd.git</connection>
+		<connection>scm:git:https://github.com/NanoHttpd/nanohttpd.git</connection>
 		<developerConnection>scm:git:https://github.com/NanoHttpd/nanohttpd.git</developerConnection>
 		<url>https://github.com/NanoHttpd/nanohttpd</url>
-		<tag>HEAD</tag> -->
-		<connection>scm:git:https://github.com/kdxhub/kdxhub-NanoHTTPd-with-ProxyProtocol.git</connection>
-		<developerConnection>scm:git:https://github.com/kdxhub/kdxhub-NanoHTTPd-with-ProxyProtocol.git</developerConnection>
-		<url>https://github.com/kdxhub/kdxhub-NanoHTTPd-with-ProxyProtocol</url>
 		<tag>HEAD</tag>
 	</scm>
+	<organization>
+		<name>nanohttpd</name>
+	</organization>
+	<distributionManagement>
+		<repository>
+			<id>sonatype-nexus-staging</id>
+			<name>nanohttpd sonytype Maven 2 repository</name>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+		</repository>
+		<snapshotRepository>
+			<id>sonatype-nexus-staging</id>
+			<name>nanohttpd sonytype Snapshot Maven 2 repository</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<site>
+			<id>private-deploy</id>
+			<name>private Project Site</name>
+			<url>scp://nanohttpd.org:33333/home/nanohttpd/public_html</url>
+		</site>
+	</distributionManagement>
 	<inceptionYear>2012</inceptionYear>
 	<developers>
 		<developer>
@@ -29,6 +45,7 @@
 			<name>Paul Hawke</name>
 			<url>http://www.linkedin.com/in/paulhawke</url>
 			<roles>
+				<role>Administrator</role>
 				<role>Developer</role>
 			</roles>
 			<properties>
@@ -40,6 +57,7 @@
 			<name>Jarno Elonen</name>
 			<email>elonen [at] iki [dot] fi</email>
 			<roles>
+				<role>Administrator</role>
 				<role>Developer</role>
 			</roles>
 			<properties>
@@ -51,6 +69,7 @@
 			<name>Richard van Nieuwenhoven</name>
 			<email>ritchie [at] gmx [dot] at</email>
 			<roles>
+				<role>Administrator</role>
 				<role>Developer</role>
 			</roles>
 			<properties>
@@ -62,27 +81,17 @@
 			<name>Diogo Duarte</name>
 			<email>diogo.duarte [at] techie [dot] com</email>
 			<roles>
+				<role>Administrator</role>
 				<role>Developer</role>
 			</roles>
 			<properties>
 				<picUrl>https://avatars1.githubusercontent.com/u/3021352</picUrl>
 			</properties>
 		</developer>
-		<developer>
-			<id>kdxiaoyi</id>
-			<name>Yi Yuxuan</name>
-			<email>kdxiaoyi [at] outlook [dot] com</email>
-			<roles>
-				<role>Developer</role>
-			</roles>
-			<properties>
-				<picUrl>https://avatars.githubusercontent.com/u/169080523</picUrl>
-			</properties>
-		</developer>
 	</developers>
 	<issueManagement>
 		<system>github</system>
-		<url>https://github.com/kdxhub/kdxhub-NanoHTTPd-with-ProxyProtocol/issues</url>
+		<url>https://github.com/NanoHttpd/nanohttpd/issues</url>
 	</issueManagement>
 	<modules>
 		<module>core</module>
