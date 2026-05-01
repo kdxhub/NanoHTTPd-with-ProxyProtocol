@@ -356,7 +356,7 @@ public class HTTPSession implements IHTTPSession {
                     if (this.proxyProtocol != null && this.proxyProtocol.available && this.proxyProtocol.realIp != null) {
                         this.remoteIp = this.proxyProtocol.realIp;
                     }
-                } catch (IllegalArgumentException | IOException e) {
+                } catch (IllegalArgumentException e) {
                     // 解析失败时忽略，保持原有 remoteIp
                     NanoHTTPD.LOG.log(Level.FINE, "ProxyProtocol parsing failed: " + e.getMessage());
                 }
