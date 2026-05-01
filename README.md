@@ -2,11 +2,40 @@
 
 *NanoHTTPD* is a light-weight HTTP server designed for embedding in other applications, released under a Modified BSD licence.
 
-It is being developed at Github and uses Apache Maven for builds & unit testing:
+### 修改概述
+本改版主要添加了 Proxy Protocol 的支持。由于不支持 Maven Central ，请先使用[Jitpack.io](https://jitpack.io/#kdxhub/NanoHTTPd-with-ProxyProtocol?tab=License-1-ov-file:~:text=Step%201.%20Add%20the%20JitPack%20repository%20to%20your%20build%20file)。
 
- * Build status: [![Build Status](https://api.travis-ci.org/NanoHttpd/nanohttpd.png)](https://travis-ci.org/NanoHttpd/nanohttpd)
- * Coverage Status: [![Coverage Status](https://coveralls.io/repos/NanoHttpd/nanohttpd/badge.svg)](https://coveralls.io/r/NanoHttpd/nanohttpd)
- * Current central released version: [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.nanohttpd/nanohttpd/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.nanohttpd/nanohttpd)
+之后，像往常一样使用 NanoHTTPd 时，可以控制是否要使用 Proxy Protocol 。
+
+```java
+public class App extends NanoHTTPD {
+  private void someFunc() {
+    // 使用这个来启用
+    putProxyProtocolSupport("v1");
+    putProxyProtocolSupport("v2");
+    putProxyProtocolSupport("auto");
+    // 设置为其它值或者为 Null 来禁用
+    putProxyProtocolSupport(null);
+  }
+
+  @Override
+  public String getProxyProtocolSupport() {
+    // 该方法已存在，无需覆写
+    return null | "v1" | "v2" | "auto"; // 因为本项目只是轻量解决该问题，所以就不按标准流程走，请注意幽灵字符串问题。
+  }
+}
+```
+
+此外也提供解析 Proxy Protocol 的功能：
+
+```java
+ProxyProtocol pp = new ProxyProtocol(...args);
+if (pp.available != true) {
+    // 解析失败
+}
+// 之后可以使用它了
+pp.getIp();
+```
 
 ## Quickstart
 

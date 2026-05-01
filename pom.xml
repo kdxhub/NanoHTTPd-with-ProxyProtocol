@@ -7,37 +7,21 @@
 	</parent>
 	<groupId>org.nanohttpd</groupId>
 	<artifactId>nanohttpd-project</artifactId>
-	<version>2.3.2-SNAPSHOT</version>
+	<version>2.4.0</version>
 	<packaging>pom</packaging>
 	<name>NanoHttpd-Project</name>
-	<description>NanoHttpd is a light-weight HTTP server designed for embedding in other applications.</description>
-	<url>http://www.nanohttpd.org</url>
+	<description>NanoHttpd is a light-weight HTTP server designed for embedding in other applications, which support Proxy Protocol now.</description>
+	<url>https://github.com/kdxhub/kdxhub-NanoHTTPd-with-ProxyProtocol</url>
 	<scm>
-		<connection>scm:git:https://github.com/NanoHttpd/nanohttpd.git</connection>
+		<!-- <connection>scm:git:https://github.com/NanoHttpd/nanohttpd.git</connection>
 		<developerConnection>scm:git:https://github.com/NanoHttpd/nanohttpd.git</developerConnection>
 		<url>https://github.com/NanoHttpd/nanohttpd</url>
+		<tag>HEAD</tag> -->
+		<connection>scm:git:https://github.com/kdxhub/kdxhub-NanoHTTPd-with-ProxyProtocol.git</connection>
+		<developerConnection>scm:git:https://github.com/kdxhub/kdxhub-NanoHTTPd-with-ProxyProtocol.git</developerConnection>
+		<url>https://github.com/kdxhub/kdxhub-NanoHTTPd-with-ProxyProtocol</url>
 		<tag>HEAD</tag>
 	</scm>
-	<organization>
-		<name>nanohttpd</name>
-	</organization>
-	<distributionManagement>
-		<repository>
-			<id>sonatype-nexus-staging</id>
-			<name>nanohttpd sonytype Maven 2 repository</name>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-		</repository>
-		<snapshotRepository>
-			<id>sonatype-nexus-staging</id>
-			<name>nanohttpd sonytype Snapshot Maven 2 repository</name>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-		<site>
-			<id>private-deploy</id>
-			<name>private Project Site</name>
-			<url>scp://nanohttpd.org:33333/home/nanohttpd/public_html</url>
-		</site>
-	</distributionManagement>
 	<inceptionYear>2012</inceptionYear>
 	<developers>
 		<developer>
@@ -45,7 +29,6 @@
 			<name>Paul Hawke</name>
 			<url>http://www.linkedin.com/in/paulhawke</url>
 			<roles>
-				<role>Administrator</role>
 				<role>Developer</role>
 			</roles>
 			<properties>
@@ -57,7 +40,6 @@
 			<name>Jarno Elonen</name>
 			<email>elonen [at] iki [dot] fi</email>
 			<roles>
-				<role>Administrator</role>
 				<role>Developer</role>
 			</roles>
 			<properties>
@@ -69,7 +51,6 @@
 			<name>Richard van Nieuwenhoven</name>
 			<email>ritchie [at] gmx [dot] at</email>
 			<roles>
-				<role>Administrator</role>
 				<role>Developer</role>
 			</roles>
 			<properties>
@@ -81,17 +62,27 @@
 			<name>Diogo Duarte</name>
 			<email>diogo.duarte [at] techie [dot] com</email>
 			<roles>
-				<role>Administrator</role>
 				<role>Developer</role>
 			</roles>
 			<properties>
 				<picUrl>https://avatars1.githubusercontent.com/u/3021352</picUrl>
 			</properties>
 		</developer>
+		<developer>
+			<id>kdxiaoyi</id>
+			<name>Yi Yuxuan</name>
+			<email>kdxiaoyi [at] outlook [dot] com</email>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<properties>
+				<picUrl>https://avatars.githubusercontent.com/u/169080523</picUrl>
+			</properties>
+		</developer>
 	</developers>
 	<issueManagement>
 		<system>github</system>
-		<url>https://github.com/NanoHttpd/nanohttpd/issues</url>
+		<url>https://github.com/kdxhub/kdxhub-NanoHTTPd-with-ProxyProtocol/issues</url>
 	</issueManagement>
 	<modules>
 		<module>core</module>
@@ -124,8 +115,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.3</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -192,7 +183,7 @@
 					</dependency>
 				</dependencies>
 			</plugin>
-			<plugin>
+			<!-- <plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>license-maven-plugin</artifactId>
 				<version>1.7</version>
@@ -216,7 +207,7 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin> -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -266,7 +257,24 @@
 					</execution>
 				</executions>
 			</plugin>
-		</plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-antrun-plugin</artifactId>
+					<version>3.0.0</version>
+					<executions>
+						<execution>
+							<phase>package</phase>
+							<goals><goal>run</goal></goals>
+							<configuration>
+								<target>
+									<echo file="${project.build.directory}/artifacts.txt"
+										message="${project.build.finalName}.${project.packaging}"/>
+								</target>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
 	</build>
 	<reporting>
 		<plugins>
@@ -325,7 +333,7 @@
 				<configuration>
 					<linkXref>true</linkXref>
 					<sourceEncoding>UTF-8</sourceEncoding>
-					<targetJdk>1.7</targetJdk>
+					<targetJdk>1.8</targetJdk>
 					<skipEmptyReport>false</skipEmptyReport>
 					<minimumTokens>50</minimumTokens>
 				</configuration>
@@ -477,30 +485,6 @@
 						<groupId>org.eluder.coveralls</groupId>
 						<artifactId>coveralls-maven-plugin</artifactId>
 						<version>3.1.0</version>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<id>use 1.7 compiler</id>
-			<activation>
-				<file>
-					<exists>/usr/lib/jvm/java-7-openjdk-amd64/bin/javac</exists>
-				</file>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-compiler-plugin</artifactId>
-						<version>3.3</version>
-						<configuration>
-							<source>1.7</source>
-							<target>1.7</target>
-							<verbose>true</verbose>
-							<fork>true</fork>
-							<executable>/usr/lib/jvm/java-7-openjdk-amd64/bin/javac</executable>
-						</configuration>
 					</plugin>
 				</plugins>
 			</build>
