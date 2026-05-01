@@ -23,6 +23,12 @@ public class App extends NanoHTTPD {
     // 该方法已存在，无需覆写
     return null | "v1" | "v2" | "auto"; // 因为本项目只是轻量解决该问题，所以就不按标准流程走，请注意幽灵字符串问题。
   }
+
+  @Override
+  public void serve(IHTTPSession session) {
+    // 在你的处理器中获取 Proxy Protocol 数据
+    ProxyProtocol pp = session.getProxyProtocol();
+  }
 }
 ```
 

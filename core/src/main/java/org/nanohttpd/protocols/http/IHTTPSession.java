@@ -38,6 +38,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
+import org.nanohttpd.protocols.ProxyProtocol;
 import org.nanohttpd.protocols.http.NanoHTTPD.ResponseException;
 import org.nanohttpd.protocols.http.content.CookieHandler;
 import org.nanohttpd.protocols.http.request.Method;
@@ -90,4 +91,11 @@ public interface IHTTPSession {
      * @return the IP address.
      */
     String getRemoteIpAddress();
+
+    /**
+     * Get the raw ProxyProtocol data of the requester.
+     * 
+     * @return the ProxyProtocol data.
+     */
+    ProxyProtocol getProxyProtocol();
 }

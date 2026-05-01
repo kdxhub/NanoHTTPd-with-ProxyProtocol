@@ -47,6 +47,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
@@ -59,6 +60,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 
+import org.nanohttpd.protocols.ProxyProtocol;
 import org.nanohttpd.protocols.http.response.Response;
 import org.nanohttpd.protocols.http.response.Status;
 import org.nanohttpd.protocols.http.sockets.DefaultServerSocketFactory;
@@ -123,6 +125,47 @@ import org.nanohttpd.util.IHandler;
  * licence)
  */
 public abstract class NanoHTTPD {
+
+    private volatile String proxyProtocol = "none";
+
+    /**
+     * Set the support for Proxy Protocol
+     * 
+     * @param value
+     *            "v1" | "v2" | "auto" | anything else = Disabled
+     * @see {@link ProxyProtocol.PROXY_PROTOCOL_SUPPORT}
+     * @see {@link https://www.haproxy.org/download/1.8/doc/proxy-protocol.txt}
+     */
+    public void putProxyProtocolSupport(String value) {
+        switch (Objects.requireNonNullElse(value, "").toLowerCase()) {
+            case "v1":
+            case "1":
+                proxyProtocol = ProxyProtocol.PROXY_PROTOCOL_SUPPORT.V1;
+                break;
+            case "v2":
+            case "2":
+                proxyProtocol = ProxyProtocol.PROXY_PROTOCOL_SUPPORT.V2;
+                break;
+            case "auto":
+            case "a":
+                proxyProtocol = ProxyProtocol.PROXY_PROTOCOL_SUPPORT.AUTO;
+                break;
+
+            default:
+                proxyProtocol = ProxyProtocol.PROXY_PROTOCOL_SUPPORT.NONE;
+                break;
+        }
+    }
+
+    /**
+     * Get the support for Proxy Protocol
+     * 
+     * @see {@link ProxyProtocol.PROXY_PROTOCOL_SUPPORT}
+     * @see {@link https://www.haproxy.org/download/1.8/doc/proxy-protocol.txt}
+     */
+    public String getProxyProtocolSupport() {
+        return proxyProtocol;
+    }
 
     public static final String CONTENT_DISPOSITION_REGEX = "([ |\t]*Content-Disposition[ |\t]*:)(.*)";
 

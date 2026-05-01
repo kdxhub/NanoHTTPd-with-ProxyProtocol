@@ -62,6 +62,7 @@ import java.util.regex.Matcher;
 
 import javax.net.ssl.SSLException;
 
+import org.nanohttpd.protocols.ProxyProtocol;
 import org.nanohttpd.protocols.http.NanoHTTPD.ResponseException;
 import org.nanohttpd.protocols.http.content.ContentType;
 import org.nanohttpd.protocols.http.content.CookieHandler;
@@ -110,6 +111,13 @@ public class HTTPSession implements IHTTPSession {
     private String remoteIp;
 
     private String protocolVersion;
+
+    private ProxyProtocol proxyProtocol = null;
+
+    @Override
+    public ProxyProtocol getProxyProtocol() {
+        return proxyProtocol;
+    }
 
     public HTTPSession(NanoHTTPD httpd, ITempFileManager tempFileManager, InputStream inputStream, OutputStream outputStream) {
         this.httpd = httpd;
@@ -339,6 +347,12 @@ public class HTTPSession implements IHTTPSession {
     public void execute() throws IOException {
         Response r = null;
         try {
+            // 首先需要解析 Proxy Protocol ，这段数据在任何应用数据之前。
+            proxyProtocol = new ProxyProtocol(inputStream, protocolVersion);
+            if (pp.available) {
+                this.remoteIp = pp.realIp;
+            }
+
             // Read the first 8192 bytes.
             // The full header should fit in here.
             // Apache's default header limit is 8KB.
