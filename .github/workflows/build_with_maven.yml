@@ -33,14 +33,9 @@ jobs:
         run: |
           mvn -B clean package
 
-      # 2. 检查构建产物
-      - name: Detect artifact name
-        id: artifacts
-        run: echo "name=$(cat target/artifacts.txt)" >> "$GITHUB_OUTPUT"
-
       # 5. 上传 CI 产物
       - name: Upload built jar
         uses: actions/upload-artifact@v4
         with:
           name: NanoHTTPd-with-ProxyProtocol-git@${{ steps.git.outputs.sha }}
-          path: target/*.jar
+          path: "*target/*.jar"

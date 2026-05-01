@@ -57,7 +57,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: NanoHTTPd-with-ProxyProtocol-git@${{ steps.git.outputs.sha }}.jar
-          path: target/*.jar
+          path: "*target/*.jar"
 
       # 读取 ChangeLog 内容
       - name: Read ChangeLog
@@ -83,7 +83,7 @@ jobs:
           name: v${{ github.ref_name }}
           body: ${{ steps.changelog.outputs.body }}
           files: |
-            target/*.jar
+            *target/*.jar
           draft: false
           prerelease: ${{ steps.tagcheck.outputs.prerelease }}
         env:
