@@ -353,7 +353,7 @@ public class HTTPSession implements IHTTPSession {
             if (ppSupport != null && !ppSupport.equals(ProxyProtocol.PROXY_PROTOCOL_SUPPORT.NONE)) {
                 try {
                     this.proxyProtocol = new ProxyProtocol(inputStream, ppSupport);
-                    if (this.proxyProtocol != null && this.proxyProtocol.available) {
+                    if (this.proxyProtocol != null && this.proxyProtocol.available && this.proxyProtocol.realIp != null) {
                         this.remoteIp = this.proxyProtocol.realIp;
                     }
                 } catch (IllegalArgumentException | IOException e) {
